@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday 🎉</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background: linear-gradient(to top, #ffdde1, #ee9ca7);
+      overflow: hidden;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+    }
+
+    h1 {
+      font-size: 6vw;
+      text-align: center;
+      color: white;
+      margin-bottom: 100px;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+    }
+
+    /* Balon */
+    .balloon {
+      position: absolute;
+      bottom: -150px;
+      width: 40px;
+      height: 60px;
+      border-radius: 50%;
+      animation: float 8s infinite ease-in;
+    }
+    @keyframes float {
+      0% { transform: translateY(0) scale(1); opacity:1; }
+      100% { transform: translateY(-110vh) scale(1.2); opacity:0; }
+    }
+
+    /* Kue */
+    .cake {
+      position: relative;
+      width: 50vw;
+      max-width: 220px;
+      height: 120px;
+      background: #ffadad;
+      border-radius: 10px;
+      box-shadow: inset 0 10px #ff7f7f;
+      margin: 20px auto 0;
+      display: none;
+    }
+    .cake::before {
+      content: "";
+      position: absolute;
+      top: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70%;
+      height: 40px;
+      background: #ffd6a5;
+      border-radius: 10px 10px 0 0;
+      box-shadow: inset 0 10px #ffb347;
+    }
+
+    /* Lilin */
+    .candle {
+      position: absolute;
+      top: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 40px;
+      background: #fff;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .flame {
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 15px;
+      height: 25px;
+      background: radial-gradient(circle at 50% 30%, yellow, orange, red);
+      border-radius: 50%;
+      animation: flicker 0.25s infinite alternate;
+    }
+    @keyframes flicker {
+      from { transform: translateX(-50%) scale(1); opacity:1; }
+      to { transform: translateX(-50%) scale(1.2); opacity:0.8; }
+    }
+
+    /* Confetti */
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: hsl(calc(360*var(--i)), 80%, 60%);
+      top: -10px;
+      animation: fall 3s linear forwards;
+    }
+    @keyframes fall {
+      to { transform: translateY(100vh) rotate(720deg); }
+    }
+
+    /* Bubble Harapan */
+    .wish {
+      position: absolute;
+      bottom: 0;
+      padding: 10px 15px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.8);
+      color: #d63384;
+      font-size: 1rem;
+      animation: rise 6s forwards;
+      white-space: nowrap;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    }
+    @keyframes rise {
+      from { transform: translateY(0) scale(0.8); opacity: 1; }
+      to { transform: translateY(-110vh) scale(1.2); opacity: 0; }
+    }
+
+    /* Responsive tweak */
+    @media (max-width: 480px) {
+      .cake { height: 100px; }
+      .candle { height: 30px; }
+      .flame { width: 12px; height: 20px; }
+      .balloon { width: 30px; height: 45px; }
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <h1 id="title">Selamat Ulang Tahun 🎉</h1>
+    <div class="cake" id="cake">
+      <div class="candle" id="candle">
+        <div class="flame" id="flame"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Musik ulang tahun -->
+  <audio id="music" src="sagala.musik7_7399632503176203526.mp3"></audio>
+
+  <script>
+    const cake = document.getElementById("cake");
+    const flame = document.getElementById("flame");
+    const music = document.getElementById("music");
+    const title = document.getElementById("title");
+
+    // 🎈 Balon terbang
+    for (let i=0; i<15; i++){
+      const b = document.createElement("div");
+      b.classList.add("balloon");
+      b.style.left = Math.random()*100 + "vw";
+      b.style.background = `radial-gradient(circle at 30% 30%, #fff, hsl(${Math.random()*360},70%,60%))`;
+      b.style.animationDuration = (5+Math.random()*5)+"s";
+      document.body.appendChild(b);
+    }
+
+    // 🎂 Munculkan kue setelah 2 detik
+    setTimeout(()=> cake.style.display="block", 2000);
+
+    // 🔥 Fungsi tiup lilin
+    function blowCandle(){
+      flame.style.display = "none";   // padam
+      music.play();                   // musik
+      title.textContent = "Happy Birthday Banat 💖🎂";
+      launchConfetti();               // confetti
+      launchWishes();                 // harapan
+    }
+
+    // Klik lilin / tekan spasi
+    document.getElementById("candle").addEventListener("click", blowCandle);
+    document.addEventListener("keydown", e=>{
+      if(e.code === "Space") blowCandle();
+    });
+
+    // 🎊 Confetti
+    function launchConfetti(){
+      for(let i=0; i<60; i++){
+        const c = document.createElement("div");
+        c.className="confetti";
+        c.style.setProperty("--i", Math.random());
+        c.style.left = Math.random()*100+"vw";
+        document.body.appendChild(c);
+        setTimeout(()=> c.remove(), 3000);
+      }
+    }
+
+    // 💭 Harapan Bubble
+    const wishes = [
+      "Semoga sehat selalu 💪",
+      "Panjang umur 🎂",
+      "Semoga makin sukses ✨",
+      "Banyak rezeki 💵",
+      "Tetap bahagia selalu 💖"
+    ];
+
+    function launchWishes(){
+      wishes.forEach((text, i)=>{
+        setTimeout(()=>{
+          const w = document.createElement("div");
+          w.className = "wish";
+          w.textContent = text;
+          w.style.left = Math.random()*80 + "vw";
+          document.body.appendChild(w);
+          setTimeout(()=> w.remove(), 6000);
+        }, i*1000);
+      });
+    }
+  </script>
+</body>
+</html>
